@@ -117,7 +117,7 @@ void StartDefaultTask(void *argument)
   osDelay(4000);
   
   USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
-  HAL_SAI_Receive_DMA(&hsai_BlockA1, (uint8_t *)buf, sizeof(buf)/sizeof(uint32_t)*2);
+  HAL_SAI_Receive_DMA(&hsai_BlockA1, (uint8_t *)buf, sizeof(buf)/sizeof(uint32_t));
 
   /* Infinite loop */
   for(;;)
