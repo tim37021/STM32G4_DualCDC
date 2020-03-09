@@ -263,11 +263,11 @@ static int8_t CDC_Control_FS(USBD_CDC_HandleTypeDef *cdc, uint8_t cmd, uint8_t* 
 static int8_t CDC_Receive_FS(USBD_CDC_HandleTypeDef *cdc, uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-  USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
-  if(&hcdc->CDC1 == cdc)
-    CDC_Transmit_FS(&hcdc->CDC2, Buf, *Len);
-  if(&hcdc->CDC2 == cdc)
-    CDC_Transmit_FS(&hcdc->CDC1, Buf, *Len);
+  //USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+  ///if(&hcdc->CDC1 == cdc)
+  //  CDC_Transmit_FS(&hcdc->CDC2, Buf, *Len);
+  //if(&hcdc->CDC2 == cdc)
+  //  CDC_Transmit_FS(&hcdc->CDC1, Buf, *Len);
 
   USBD_DCDC_SetRxBuffer(&hUsbDeviceFS, cdc, &Buf[0]);
   USBD_DCDC_ReceivePacket(&hUsbDeviceFS, cdc);

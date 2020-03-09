@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
 #include "usbd_cdc_if.h"
+#include "sai.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,7 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define FRAME_SIZE 256
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -46,7 +47,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+// 8 channel, buffer size, double buffer
+uint32_t buf[8*FRAME_SIZE*2];
+extern USBD_HandleTypeDef hUsbDeviceFS;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -112,13 +115,15 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   osDelay(4000);
-  extern USBD_HandleTypeDef hUsbDeviceFS;
+  
   USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+  HAL_SAI_Receive_DMA(&hsai_BlockA1, (uint8_t *)buf, sizeof(buf)/sizeof(uint32_t)*2);
 
   /* Infinite loop */
   for(;;)
   {
-    //CDC_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
+    CDC_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
+    CDC_Transmit_FS(&hcdc->CDC2, "ggin\n", 5);
     osDelay(1000);
   }
   /* USER CODE END StartDefaultTask */
@@ -126,7 +131,34 @@ void StartDefaultTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-     
+extern USBD_HandleTypeDef hUsbDeviceFS;
+void HAL_SAI_RxHalfCpltCallback(SAI_HandleTypeDef *hsai)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hsai);
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_SAI_RxHalfCpltCallback could be implemented in the user file
+   */
+
+  USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+  volatile int ret = CDC_Transmit_FS(&hcdc->CDC1, (uint8_t *)buf, 8*FRAME_SIZE*sizeof(uint32_t));
+  ret *= 1;
+}
+
+void HAL_SAI_RxCpltCallback(SAI_HandleTypeDef *hsai)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hsai);
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_SAI_RxCpltCallback could be implemented in the user file
+   */
+
+  USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+  volatile int ret = CDC_Transmit_FS(&hcdc->CDC1, (uint8_t *)(buf+8*FRAME_SIZE), 8*FRAME_SIZE*sizeof(uint32_t));
+  ret *= 1;
+}
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
