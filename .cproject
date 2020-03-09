@@ -18,7 +18,7 @@
 					<folderInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1316847004." name="/" resourcePath="">
 						<toolChain id="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug.223471830" name="Ac6 STM32 MCU GCC" superClass="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug">
 							<option id="fr.ac6.managedbuild.option.gnu.cross.prefix.2018332916" name="Prefix" superClass="fr.ac6.managedbuild.option.gnu.cross.prefix" value="arm-none-eabi-" valueType="string" />
-							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.2060694887" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu" value="STM32G473CETx" valueType="string" />
+							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.2060694887" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu" value="" valueType="string" />
 							<option id="fr.ac6.managedbuild.option.gnu.cross.board.537172413" name="Board" superClass="fr.ac6.managedbuild.option.gnu.cross.board" value="LiCAP_R_EVT" valueType="string" />
 							<option id="fr.ac6.managedbuild.option.gnu.cross.core.1083960614" name="Core" superClass="fr.ac6.managedbuild.option.gnu.cross.core" valueType="stringList">
 								<listOptionValue builtIn="false" value="ARM Cortex-M4" />
@@ -141,7 +141,7 @@
 					<folderInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.release.2121725696." name="/" resourcePath="">
 						<toolChain id="fr.ac6.managedbuild.toolchain.gnu.cross.exe.release.1374666725" name="Ac6 STM32 MCU GCC" superClass="fr.ac6.managedbuild.toolchain.gnu.cross.exe.release">
 							<option id="fr.ac6.managedbuild.option.gnu.cross.prefix.2018332916" name="Prefix" superClass="fr.ac6.managedbuild.option.gnu.cross.prefix" value="arm-none-eabi-" valueType="string" />
-							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.2060694887" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu" value="STM32G473CETx" valueType="string" />
+							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.2060694887" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu" value="" valueType="string" />
 							<option id="fr.ac6.managedbuild.option.gnu.cross.board.537172413" name="Board" superClass="fr.ac6.managedbuild.option.gnu.cross.board" value="LiCAP_R_EVT" valueType="string" />
 							<option id="fr.ac6.managedbuild.option.gnu.cross.core.1083960614" name="Core" superClass="fr.ac6.managedbuild.option.gnu.cross.core" valueType="stringList">
 								<listOptionValue builtIn="false" value="ARM Cortex-M4" />
