@@ -25,7 +25,7 @@
 #include "usbd_def.h"
 #include "usbd_core.h"
 
-#include "usbd_dcdc.h"
+#include "usbd_cdc_midi.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -452,18 +452,18 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
   HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , 0x80 , PCD_SNG_BUF, 0x58);
   /* USER CODE END EndPoint_Configuration */
   /* USER CODE BEGIN EndPoint_Configuration_CDC */
-  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , DCDC_IN_EP , PCD_SNG_BUF, 0x98);
-  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , DCDC_OUT_EP , PCD_SNG_BUF, 0xD8);
-  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , DCDC_CMD_EP , PCD_SNG_BUF, 0x118);
+  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , CMCDC_IN_EP , PCD_SNG_BUF, 0x98);
+  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , CMCDC_OUT_EP , PCD_SNG_BUF, 0xD8);
+  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , CMCDC_CMD_EP , PCD_SNG_BUF, 0x118);
 
   //HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , 0x83 , PCD_SNG_BUF, 0x150);
   //HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , 0x02 , PCD_SNG_BUF, 0x1A0);
   //HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , 0x84 , PCD_SNG_BUF, 0x190);
 
 
-  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , DCDC_IN_EP2 , PCD_SNG_BUF, 0x128);
-  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , DCDC_OUT_EP2, PCD_SNG_BUF, 0x168);
-  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , DCDC_CMD_EP2, PCD_SNG_BUF, 0x1A8);
+  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , CMMIDI_IN_EP , PCD_SNG_BUF, 0x128);
+  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , CMMIDI_OUT_EP, PCD_SNG_BUF, 0x168);
+  HAL_PCDEx_PMAConfig((PCD_HandleTypeDef*)pdev->pData , CMCDC_CMD_EP2, PCD_SNG_BUF, 0x1A8);
   /* USER CODE END EndPoint_Configuration_CDC */
   return USBD_OK;
 }
@@ -757,7 +757,7 @@ void USBD_LL_Delay(uint32_t Delay)
   */
 void *USBD_static_malloc(uint32_t size)
 {
-  static uint32_t mem[(sizeof(USBD_DCDC_HandleTypeDef)/4)+1];/* On 32-bit boundary */
+  static uint32_t mem[(sizeof(USBD_CM_HandleTypeDef)/4)+1];/* On 32-bit boundary */
   return mem;
 }
 

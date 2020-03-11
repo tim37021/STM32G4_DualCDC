@@ -39,7 +39,16 @@ add_definitions(-D__weak=__attribute__\(\(weak\)\) -D__packed=__attribute__\(\(_
 
 file(GLOB_RECURSE SOURCES "startup/*.*" "Middlewares/*.*" "Drivers/*.*" "Src/*.*")
 
-include_directories(Inc Drivers/STM32G4xx_HAL_Driver/Inc Drivers/STM32G4xx_HAL_Driver/Inc/Legacy Middlewares/Third_Party/FreeRTOS/Source/include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 Middlewares/ST/STM32_USB_Device_Library/Core/Inc Middlewares/ST/STM32_USB_Device_Library/Class/DCDC/Inc Drivers/CMSIS/Device/ST/STM32G4xx/Include Drivers/CMSIS/Include)
+include_directories(Inc Drivers/STM32G4xx_HAL_Driver/Inc 
+    Drivers/STM32G4xx_HAL_Driver/Inc/Legacy 
+    Middlewares/Third_Party/FreeRTOS/Source/include 
+    Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F 
+    Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 
+    Middlewares/ST/STM32_USB_Device_Library/Core/Inc 
+    Middlewares/ST/STM32_USB_Device_Library/Class/DCDC/Inc 
+    Middlewares/ST/STM32_USB_Device_Library/Class/CDCMIDI/Inc 
+    Drivers/CMSIS/Device/ST/STM32G4xx/Include Drivers/CMSIS/Include
+)
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 

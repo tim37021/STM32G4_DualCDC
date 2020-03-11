@@ -26,7 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
-#include "usbd_cdc_if.h"
+#include "usbd_cdc_midi_if.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -111,14 +111,20 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+  uint8_t note_on[] = {0x09,0x92,0x42,0x7F};
+  uint8_t note_off[] = {0x08,0x82,0x42,0x7F};
   osDelay(4000);
   extern USBD_HandleTypeDef hUsbDeviceFS;
-  USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+  USBD_CM_HandleTypeDef *hcdc = (USBD_CM_HandleTypeDef*)hUsbDeviceFS.pClassData;
 
   /* Infinite loop */
   for(;;)
   {
-    //CDC_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
+    CM_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
+    CM_Transmit_FS(&hcdc->CDC2, note_on, 4);
+    osDelay(1000);
+    CM_Transmit_FS(&hcdc->CDC2, note_off, 4);
+    
     osDelay(1000);
   }
   /* USER CODE END StartDefaultTask */

@@ -24,8 +24,8 @@
 #include "usb_device.h"
 #include "usbd_core.h"
 #include "usbd_desc.h"
-#include "usbd_dcdc.h"
-#include "usbd_cdc_if.h"
+#include "usbd_cdc_midi.h"
+#include "usbd_cdc_midi_if.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -74,10 +74,10 @@ void MX_USB_Device_Init(void)
   if (USBD_Init(&hUsbDeviceFS, &DCDC_Desc, DEVICE_FS) != USBD_OK) {
     Error_Handler();
   }
-  if (USBD_RegisterClass(&hUsbDeviceFS, &USBD_DCDC) != USBD_OK) {
+  if (USBD_RegisterClass(&hUsbDeviceFS, &USBD_CM) != USBD_OK) {
     Error_Handler();
   }
-  if (USBD_DCDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS) != USBD_OK) {
+  if (USBD_CM_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS) != USBD_OK) {
     Error_Handler();
   }
   if (USBD_Start(&hUsbDeviceFS) != USBD_OK) {
