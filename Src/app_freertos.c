@@ -120,7 +120,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    CM_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
+    CM_Transmit_FS(&hcdc->CDC1, "hello\r\n", 7);
     CM_Transmit_FS(&hcdc->CDC2, note_on, 4);
     osDelay(1000);
     CM_Transmit_FS(&hcdc->CDC2, note_off, 4);
