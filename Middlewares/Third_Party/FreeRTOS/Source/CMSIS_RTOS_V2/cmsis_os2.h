@@ -206,6 +206,9 @@ typedef void *osMemoryPoolId_t;
 /// \details Message Queue ID identifies the message queue.
 typedef void *osMessageQueueId_t;
 
+/// \details Stream ID identifies the stream.
+typedef void *osStreamId_t;
+
 
 #ifndef TZ_MODULEID_T
 #define TZ_MODULEID_T
@@ -726,6 +729,23 @@ osStatus_t osMessageQueueReset (osMessageQueueId_t mq_id);
 /// \return status code that indicates the execution status of the function.
 osStatus_t osMessageQueueDelete (osMessageQueueId_t mq_id);
 
+
+//  ==== StreamBuffer Functions ====
+
+/// Create and Initialize a timer.
+/// \param[in]     buffer_size          size of the buffer
+/// \return stream ID for reference by other functions or NULL in case of error.
+osStreamId_t osStreamNew (uint32_t buffer_size);
+
+
+uint32_t osStreamPut (osStreamId_t id, const void *data, uint32_t size, uint32_t timeout);
+uint32_t osStreamGet (osStreamId_t id, void *data, uint32_t *size, uint32_t timeout);
+
+
+/// Delete a Stream object.
+/// \param[in]     mq_id         Stream ID obtained by \ref osStreamNew.
+/// \return status code that indicates the execution status of the function.
+osStatus_t osStreamDelete (osStreamId_t mq_id);
 
 #ifdef  __cplusplus
 }

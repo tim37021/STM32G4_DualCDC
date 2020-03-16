@@ -28,6 +28,8 @@
 /* USER CODE BEGIN Includes */     
 #include "usbd_cdc_if.h"
 #include "sai.h"
+#include "spi.h"
+#include "main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +52,7 @@
 // 8 channel, buffer size, double buffer
 uint16_t buf[8*FRAME_SIZE*2];
 extern USBD_HandleTypeDef hUsbDeviceFS;
+osStreamId_t usbInputStream;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -75,7 +78,7 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
   */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
-       
+  usbInputStream = osStreamNew(64);
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -115,16 +118,31 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   osDelay(4000);
-  
+
+  extern osStreamId_t usbInputStream;
   USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
   HAL_SAI_Receive_DMA(&hsai_BlockA1, (uint8_t *)buf, sizeof(buf)/sizeof(uint16_t));
 
+  uint8_t rx_buf[4]="DICK";
+  uint32_t len;
   /* Infinite loop */
   for(;;)
   {
-    //CDC_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
-    CDC_Transmit_FS(&hcdc->CDC2, "ggin\n", 5);
+    if (len = osStreamGet(usbInputStream, rx_buf, 4, osWaitForever)) {
+        //CDC_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
+        //HAL_SPI_Receive_DMA(&hspi2, rx_buf, 4);
+        //while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
+        CDC_Transmit_FS(&hcdc->CDC1, rx_buf, len);
+    }
+    /*
+    
+    HAL_GPIO_WritePin(SOFT_NSS_GPIO_Port, SOFT_NSS_Pin, GPIO_PIN_RESET);
+    HAL_SPI_Transmit_DMA(&hspi1, "fuck", 4);
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    HAL_GPIO_WritePin(SOFT_NSS_GPIO_Port, SOFT_NSS_Pin, GPIO_PIN_SET);
+    
     osDelay(1000);
+    */
   }
   /* USER CODE END StartDefaultTask */
 }

@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------------
- * Portions Copyright © 2019 STMicroelectronics International N.V. All rights reserved.
+ * Portions Copyright ï¿½ 2019 STMicroelectronics International N.V. All rights reserved.
  * Copyright (c) 2013-2019 Arm Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -30,6 +30,7 @@
 #include "task.h"                       // ARM.FreeRTOS::RTOS:Core
 #include "event_groups.h"               // ARM.FreeRTOS::RTOS:Event Groups
 #include "semphr.h"                     // ARM.FreeRTOS::RTOS:Core
+#include "stream_buffer.h"
 
 /*---------------------------------------------------------------------------*/
 #ifndef __ARM_ARCH_6M__
@@ -1841,6 +1842,45 @@ osStatus_t osMessageQueueDelete (osMessageQueueId_t mq_id) {
 
   return (stat);
 }
+
+
+
+
+osStreamId_t osStreamNew (uint32_t buffer_size)
+{
+  if (!IS_IRQ()) {
+      return xStreamBufferCreate(buffer_size, 1);
+  }
+  return NULL;
+}
+
+uint32_t osStreamPut (osStreamId_t id, const void *data, uint32_t size, uint32_t timeout)
+{
+  BaseType_t yield;
+    uint32_t len;
+  if (!IS_IRQ()) {
+    len = xStreamBufferSend (id, data, size, timeout);
+
+  } else {
+      len = xStreamBufferSendFromISR (id, data, size, &yield);
+      portYIELD_FROM_ISR (yield);
+  }
+  return len;
+}
+
+uint32_t osStreamGet (osStreamId_t id, void *data, uint32_t *size, uint32_t timeout)
+{
+  BaseType_t yield;
+  size_t len;
+  if (!IS_IRQ()) {
+    len = xStreamBufferReceive(id, data, size, timeout);
+  } else {
+    len = xStreamBufferReceiveFromISR(id, data, size, &yield);
+    portYIELD_FROM_ISR (yield);
+  }
+  return len;
+}
+
 
 /*---------------------------------------------------------------------------*/
 
