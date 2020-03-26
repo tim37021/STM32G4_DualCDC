@@ -739,7 +739,7 @@ osStreamId_t osStreamNew (uint32_t buffer_size);
 
 
 uint32_t osStreamPut (osStreamId_t id, const void *data, uint32_t size, uint32_t timeout);
-uint32_t osStreamGet (osStreamId_t id, void *data, uint32_t *size, uint32_t timeout);
+uint32_t osStreamGet (osStreamId_t id, void *data, uint32_t size, uint32_t timeout);
 
 
 /// Delete a Stream object.

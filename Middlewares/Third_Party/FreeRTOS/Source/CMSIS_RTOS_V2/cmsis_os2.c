@@ -1868,7 +1868,7 @@ uint32_t osStreamPut (osStreamId_t id, const void *data, uint32_t size, uint32_t
   return len;
 }
 
-uint32_t osStreamGet (osStreamId_t id, void *data, uint32_t *size, uint32_t timeout)
+uint32_t osStreamGet (osStreamId_t id, void *data, uint32_t size, uint32_t timeout)
 {
   BaseType_t yield;
   size_t len;
