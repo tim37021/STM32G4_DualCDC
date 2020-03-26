@@ -55,6 +55,17 @@
 uint16_t buf[8*FRAME_SIZE*2];
 extern USBD_HandleTypeDef hUsbDeviceFS;
 osStreamId_t usbInputStream;
+
+
+osThreadId_t spiIOHandle;
+const osThreadAttr_t spiIOTask_attributes = {
+        .name = "spi",
+        .priority = (osPriority_t) osPriorityRealtime,
+        .stack_size = 128 * 4
+};
+
+void SpiIOWorker(void const *);
+
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -105,6 +116,7 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  spiIOHandle = osThreadNew(SpiIOWorker, NULL, &spiIOTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -174,14 +186,16 @@ static uint8_t spi2_dma_rx_buf[CMD_SIZE] = "";
 static uint32_t rx_len = CMD_SIZE;
 static uint8_t spi2_dma_tx_buf[CMD_SIZE] = "ggg";
 
-static void print_cmd_hex(const char *str, const uint8_t *arr) {
-
+static void print_cmd_hex(const char *str, const uint8_t *arr)
+{
     USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
     CDC_Transmit_FS(&hcdc->CDC2, str, strlen(str));
 }
 
 void SpiIOWorker(void const * argument)
 {
+    osDelay(4000);
+    init_chip_stream();
     memset(spi2_dma_rx_buf, 0, CMD_SIZE);
 
     uint8_t tx_buf[CMD_SIZE] = "";
@@ -195,13 +209,11 @@ void SpiIOWorker(void const * argument)
             HAL_GPIO_WritePin(SOFT_NSS_GPIO_Port, SOFT_NSS_Pin, GPIO_PIN_RESET);
             //HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
             memset(rx_buf, 0, CMD_SIZE);
-            HAL_SPI_TransmitReceive_DMA(&hspi2, tx_buf, rx_buf, CMD_SIZE);
+            HAL_SPI_TransmitReceive_DMA(&hspi1, tx_buf, rx_buf, CMD_SIZE);
             print_cmd_hex("spi transmit data: ", tx_buf);
-            while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
+            while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
             HAL_GPIO_WritePin(SOFT_NSS_GPIO_Port, SOFT_NSS_Pin, GPIO_PIN_SET);
 
-            //HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
-            //print_cmd_hex("get acked: ", rx_buf);
         }
 
         osDelay(1);
