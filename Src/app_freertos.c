@@ -32,6 +32,7 @@
 #include "main.h"
 #include "protocol.h"
 #include "protocol_spi.h"
+#include "dfu_utility.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -144,6 +145,14 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
     if (len = osStreamGet(usbInputStream, rx_buf, 1, osWaitForever)) {
+        //chip_switch_led(1, 0);
+        
+        if(get_bank())
+          CDC_Transmit_FS(&hcdc->CDC2, "BANK2\r\n", 6);
+        else
+          CDC_Transmit_FS(&hcdc->CDC2, "BANK1\r\n", 6);
+        
+        continue;
         //CDC_Transmit_FS(&hcdc->CDC1, "fuck\n", 5);
         //HAL_SPI_Receive_DMA(&hspi2, rx_buf, 4);
         //while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
@@ -189,7 +198,7 @@ static uint8_t spi2_dma_tx_buf[CMD_SIZE] = "ggg";
 static void print_cmd_hex(const char *str, const uint8_t *arr)
 {
     USBD_DCDC_HandleTypeDef *hcdc = (USBD_DCDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
-    CDC_Transmit_FS(&hcdc->CDC2, str, strlen(str));
+    //CDC_Transmit_FS(&hcdc->CDC2, str, strlen(str));
 }
 
 void SpiIOWorker(void const * argument)

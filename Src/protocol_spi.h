@@ -12,6 +12,8 @@ extern "C" {
 void init_chip_stream();
 void init_chip_rtos_tasks();
 void parse_chip_received_cmd(const uint8_t *cmd);
+void chip_knock();
+void chip_switch_led(uint8_t id, uint8_t level);
 
 extern osStreamId_t chip_output_stream;
 extern osStreamId_t chip_input_stream;

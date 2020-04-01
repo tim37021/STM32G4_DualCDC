@@ -29,7 +29,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "dfu_utility.h"
+#include <stm32g4xx_hal_flash_ex.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -72,6 +73,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+  __HAL_RCC_SYSCFG_CLK_ENABLE();
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

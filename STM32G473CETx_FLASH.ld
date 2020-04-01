@@ -62,12 +62,30 @@ _Min_Stack_Size = 0x1000; /* required amount of stack */
 MEMORY
 {
 RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 128K
-FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 512K
+BOOTLOADER (rx) : ORIGIN = 0x8000000, LENGTH = 2K
+FLASH (rx)      : ORIGIN = 0x8000800, LENGTH = 510K
 }
 
 /* Define output sections */
 SECTIONS
 {
+  /* The startup code goes first into BOOTLOADER */
+  .bl_isr_vector :
+  {
+    . = ALIGN(4);
+    KEEP(*(.bl_isr_vector)) /* Startup code */
+    . = ALIGN(4);
+  } >BOOTLOADER
+
+  .loader :
+  {
+    . = ALIGN(4);
+    *(.loader)
+    . = ALIGN(4);
+    _eloader = .;        /* define a global symbols at end of code */
+  } >BOOTLOADER
+
+
   /* The startup code goes first into FLASH */
   .isr_vector :
   {

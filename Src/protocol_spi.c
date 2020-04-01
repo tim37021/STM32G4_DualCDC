@@ -26,7 +26,7 @@ void init_chip_stream() {
     chip_return_stream = osStreamNew(256);
 }
 
-void chip_send_knock() {
+void chip_knock() {
     uint8_t cmd[CMD_SIZE] = { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     uint8_t ret_val[CMD_SIZE];
     if(cmd_with_return(cmd, ret_val, 5000) != 0) {// get return value
@@ -35,6 +35,7 @@ void chip_send_knock() {
 
     }
 }
+
 void chip_return_knock() {
     uint8_t cmd[CMD_SIZE] = { 0x00, 'h', 'i', '\0', 0x00, 0x00, 0x00, 0x00 };
     cmd_no_return(cmd, 5000);
@@ -93,8 +94,8 @@ void chip_send_freq(float freq) {
     cmd_no_return(cmd, 5000);
 }
 
-void chip_switch_led(uint8_t state) {
-    uint8_t cmd[CMD_SIZE] = { 0xA0, state, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+void chip_switch_led(uint8_t id, uint8_t level) {
+    uint8_t cmd[CMD_SIZE] = { 0xA0, id, level, 0x00, 0x00, 0x00, 0x00, 0x00 };
     cmd_no_return(cmd, 5000);
 }
 void chip_send_battery_life(uint8_t bl) {
